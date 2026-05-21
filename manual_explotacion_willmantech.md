@@ -54,7 +54,7 @@ volumes:
   willmantech_web_data:
 ```
 
-# Guía de Instalación y Reinstalación del Entorno.
+# 2. Guía de Instalación y Reinstalación del Entorno.
 
 1. Clonar el repositorio y entrar a la carpeta:
 
@@ -75,7 +75,7 @@ docker-compose logs -f
 
 5. Configuración inicial: Entra en http://localhost:8069, crea la base de datos e instala los módulos de ventas y contabilidad.
 
-# Seguridad y Control de Acceso
+# 3. Seguridad y Control de Acceso
 
 Aplicamos el principio de menor privilegio para proteger los datos de la empresa mediante tres perfiles de usuario perfectamente definidos. En primer lugar, el Admin del Sistema cuenta con control total sobre la infraestructura (permisos CRUD completos), encargándose de la gestión de usuarios y de las plantillas QWeb sin ningún tipo de restricción. Por otro lado, el Responsable Contable tiene acceso restringido a los módulos de contabilidad y facturación para gestionar el flujo transaccional, quedando completamente excluido de la configuración del servidor, del entorno Docker y de la modificación de impuestos. Finalmente, el Agente Comercial opera únicamente en la fase inicial del ciclo de ventas, lo que le permite crear presupuestos y gestionar la ficha de clientes, pero tiene bloqueado el acceso para validar facturas, realizar asientos en el libro mayor o ver la contabilidad global de la empresa.
 
@@ -84,7 +84,7 @@ Fuerza: Mínimo 12 caracteres (Mayúsculas, minúsculas, números y símbolos).
 
 Rotación: Cambiar obligatoriamente cada 180 días. No se pueden repetir las últimas 4 contraseñas.
 
-# Procedimiento de Backup y Restauración.
+# 4. Procedimiento de Backup y Restauración.
 
 Para garantizar la continuidad de negocio ante incidentes de pérdida de datos o corrupción lógica del almacenamiento persistente, se define un protocolo síncrono de respaldo que procesa de manera independiente la información estructurada y los datos binarios no estructurados.
 
@@ -98,7 +98,7 @@ docker exec -t willmantech_db pg_dump -U odoo_admin -F c -b -v -f /var/lib/postg
 
 tar -czvf backup_filestore_willmantech_$(date +%Y%m%d).tar.gz /var/lib/docker/volumes/lmsgi_ud07_willmantech_web_data/_data
 
-# Flujo Operativo de Facturación e Informes.
+# 5. Flujo Operativo de Facturación e Informes.
 
 Extracción (ORM): Odoo busca en la base de datos los datos de la cabecera de la factura (account.move) y sus líneas correspondientes (account.move.line).
 
