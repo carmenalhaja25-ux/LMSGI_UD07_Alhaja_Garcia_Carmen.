@@ -1,0 +1,123 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <record id="action_report_invoice_willmantech" model="ir.actions.report">
+        <field name="name">Factura WillmanTech</field>
+        <field name="model">account.move</field>
+        <field name="report_type">qweb-pdf</field>
+        <field name="report_name">willmantech_reports.report_invoice_willmantech_document</field>
+        <field name="report_file">willmantech_reports.report_invoice_willmantech_document</field>
+        <field name="print_report_name">'Factura_%s' % (object.name)</field>
+        <field name="binding_model_id" ref="account.model_account_move"/>
+        <field name="binding_type">report</field>
+    </record>
+    
+    <template id="report_invoice_willmantech_document">
+        <t t-call="web.html_container">
+            <t t-foreach="docs" t-as="doc">
+                <t t-call="web.external_layout">
+                    <div class="page" style="font-family: 'Helvetica', 'Arial', sans-serif; color: #333333;">
+                        
+                        <div class="row mb-4">
+                            <div class="col-6">
+                                <h2 style="color: #0056b3; font-weight: bold;">WillmanTech S.L.</h2>
+                                <p class="small text-muted">
+                                    NIF: B12345678<br/>
+                                    Calle Tecnológica, Nº 42<br/>
+                                    41001 Sevilla, España
+                                </p>
+                            </div>
+                            <div class="col-6 text-end">
+                                <h5 class="text-uppercase text-muted" style="font-size: 0.9rem;">Cliente</h5>
+                                <div t-field="doc.partner_id" t-options='{"widget": "contact", "fields": ["address", "name", "vat"], "no_marker": True}'/>
+                            </div>
+                        </div>
+                        
+                        <hr style="border-top: 2px solid #0056b3;"/>
+                        
+                        <div class="row my-4">
+                            <div class="col-4">
+                                <strong>Número de Factura:</strong>
+                                <p t-field="doc.name" class="fs-5 fw-bold text-dark"/>
+                            </div>
+                            <div class="col-4">
+                                <strong>Fecha de Emisión:</strong>
+                                <p t-field="doc.date"/>
+                            </div>
+                            <div class="col-4" t-if="doc.invoice_date_due">
+                                <strong>Fecha de Vencimiento:</strong>
+                                <p t-field="doc.invoice_date_due"/>
+                            </div>
+                        </div>
+                        
+                        <t t-set="has_discount" t-value="any(line.discount for line in doc.invoice_line_ids)"/>
+                        
+                        <table class="table table-sm o_main_table mt-4">
+                            <thead style="background-color: #f8f9fa;">
+                                <tr>
+                                    <th class="text-start">Descripción</th>
+                                    <th class="text-end">Cantidad</th>
+                                    <th class="text-end">Precio Unitario</th>
+                                    <t t-if="has_discount">
+                                        <th class="text-end">Desc. (%)</th>
+                                    </t>
+                                    <th class="text-end">Impuestos</th>
+                                    <th class="text-end">Importe</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <t t-foreach="doc.invoice_line_ids" t-as="line">
+                                    <tr t-if="not line.display_type">
+                                        <td class="text-start"><span t-field="line.name"/></td>
+                                        <td class="text-end"><span t-field="line.quantity"/></td>
+                                        <td class="text-end"><span t-field="line.price_unit"/></td>
+                                        <t t-if="has_discount">
+                                            <td class="text-end">
+                                                <span t-if="line.discount &gt; 0" t-field="line.discount" t-options='{"widget": "float", "precision": 2}'/>
+                                            </td>
+                                        </t>
+                                        <td class="text-end">
+                                            <span t-out="', '.join([tax.name for tax in line.tax_ids])"/>
+                                        </td>
+                                        <td class="text-end">
+                                            <span t-field="line.price_subtotal" t-options='{"widget": "monetary", "display_currency": doc.currency_id}'/>
+                                        </td>
+                                    </tr>
+                                </t>
+                            </tbody>
+                        </table>
+                        
+                        <div class="row justify-content-end mt-4">
+                            <div class="col-4">
+                                <table class="table table-sm table-borderless">
+                                    <tr>
+                                        <td><strong>Base Imponible:</strong></td>
+                                        <td class="text-end">
+                                            <span t-field="doc.amount_untaxed" t-options='{"widget": "monetary", "display_currency": doc.currency_id}'/>
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td><strong>Impuestos:</strong></td>
+                                        <td class="text-end">
+                                            <span t-field="doc.amount_tax" t-options='{"widget": "monetary", "display_currency": doc.currency_id}'/>
+                                        </td>
+                                    </tr>
+                                    <tr class="border-top" style="font-size: 1.2rem;">
+                                        <td><strong>Total Neto:</strong></td>
+                                        <td class="text-end fw-bold text-primary">
+                                            <span t-field="doc.amount_total" t-options='{"widget": "monetary", "display_currency": doc.currency_id}'/>
+                                        </td>
+                                    </tr>
+                                </table>
+                            </div>
+                        </div>
+                        
+                        <div class="mt-5 small text-center text-muted" style="font-size: 0.75rem;">
+                            Región Comercial de Sevilla, Tomo 1234, Folio 56, Hoja SE-7890. Inscrita en el Registro Mercantil.
+                        </div>
+                        
+                    </div>
+                </t>
+            </t>
+        </t>
+    </template>
+</odoo>
