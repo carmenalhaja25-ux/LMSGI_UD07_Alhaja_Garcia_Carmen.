@@ -2,11 +2,11 @@
 
 Este documento técnico es la guía oficial de explotación, despliegue y mantenimiento preventivo para la infraestructura integrada de gestión empresarial (ERP/CRM) de la organización WillmanTech S.L. La estructura, redacción y diseño de este manual han sido elaborados con las directrices de la norma internacional ISO/IEC/IEEE 26514:2022.
 
-## 1. Introducción y Arquitectura del Sistema
+# 1. Introducción y Arquitectura del Sistema
 
 El ERP está montado sobre Odoo 16 (utilizando los módulos de account, sale y product) y utiliza PostgreSQL 15 como base de datos. Todo funciona aislado dentro de una red de Docker (bridge).
 
-### Topología Lógica y Orquestación
+## Topología Lógica y Orquestación
 
 A continuación se detalla la especificación del archivo de orquestación `docker-compose.yml` que define el entorno productivo:
 
@@ -100,8 +100,10 @@ tar -czvf backup_filestore_willmantech_$(date +%Y%m%d).tar.gz /var/lib/docker/vo
 
 # 5. Flujo Operativo de Facturación e Informes.
 
-Extracción (ORM): Odoo busca en la base de datos los datos de la cabecera de la factura (account.move) y sus líneas correspondientes (account.move.line).
+1. Extracción y Carga de Datos(ORM): Odoo busca en la base de datos los datos de la cabecera de la factura (account.move) y sus líneas correspondientes (account.move.line).
 
-Procesamiento QWeb: El motor de Odoo lee el archivo XML de la plantilla. Procesa los bucles (t-foreach) y los condicionales (como t-if="has_discount" para saber si muestra o no la columna de descuentos). Al terminar, genera un archivo HTML con CSS embebido.
+2. Procesamiento QWeb: El motor de Odoo lee nuestro archivo 'report_invoice_willmantech.xml'.Procesa los bucles (t-foreach) y los condicionales (como t-if="has_discount" para saber si muestra o no la columna de descuentos). Al terminar, genera un archivo HTML con CSS.
 
-Conversión a PDF: Odoo le pasa ese código HTML a una herramienta del sistema llamada wkhtmltopdf (un navegador WebKit sin interfaz gráfica). Este programa calcula los márgenes y genera el archivo PDF final que se descarga en la computadora del cliente.
+3. Conversión a PDF: Odoo le pasa ese código HTML a una herramienta del sistema llamada wkhtmltopdf (un navegador WebKit sin interfaz gráfica). Este programa calcula los márgenes y genera el archivo PDF final que se descarga en la computadora del cliente.
+
+4. Entrega: El archivo PDF es retornado por el servicio web del contenedor Docker hacia la sesión HTTP del navegador del cliente, completando el ciclo de explotación del informe de facturación de WillmanTech S.L.
