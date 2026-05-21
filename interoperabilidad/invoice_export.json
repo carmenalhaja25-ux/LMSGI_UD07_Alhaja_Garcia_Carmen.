@@ -1,1 +1,38 @@
-
+[
+  {
+    "invoice_id": 1024,
+    "invoice_number": "INV/2026/001",
+    "date_invoice": "2026-05-20",
+    "currency": "EUR",
+    "tax_base": 1500.00,
+    "tax_amount": 315.00,
+    "amount_total": 1815.00,
+    "client": {
+      "client_id": 45,
+      "name": "Sistemas Industriales S.L.",
+      "vat": "B98765432",
+      "email": "compras@sistemasindustriales.es",
+      "address": "Avenida de la Innovación, Nº 10, 41020 Sevilla"
+    },
+    "invoice_lines": [
+      {
+        "line_id": 1,
+        "product_name": "Consultoría Tecnológica e Implantación ERP",
+        "quantity": 10.00,
+        "price_unit": 120.00,
+        "discount": 0.00,
+        "tax_percent": 21.00,
+        "subtotal": 1200.00
+      },
+      {
+        "line_id": 2,
+        "product_name": "Soporte Técnico Infraestructura Docker",
+        "quantity": 3.00,
+        "price_unit": 100.00,
+        "discount": 0.00,
+        "tax_percent": 21.00,
+        "subtotal": 300.00
+      }
+    ]
+  }
+]
