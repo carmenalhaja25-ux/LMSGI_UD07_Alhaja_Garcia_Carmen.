@@ -58,7 +58,7 @@ volumes:
 
 1. Clonar el repositorio y entrar a la carpeta:
 
-git clone [https://github.com/carmenalhaja25-ux/LMSGI_UD07_Alhaja_Garc-a_Carmen.git](https://github.com/carmenalhaja25-ux/LMSGI_UD07_Alhaja_Garc-a_Carmen.git)
+git clone [https://github.com/carmenalhaja25-ux/LMSGI_UD07_Alhaja_Garcia_Carmen.git](https://github.com/carmenalhaja25-ux/LMSGI_UD07_Alhaja_Garcia_Carmen.git)
 cd LMSGI_UD07_Alhaja_Garc-a_Carmen 
 
 2. Comprobar que el puerto 8069 está libre:
